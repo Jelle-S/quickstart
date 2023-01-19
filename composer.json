@@ -1,7 +1,7 @@
 {
   "name": "jelle-s/quickstart",
   "description": "Generates dns, apache and database for my personal LAMP setup",
-  "lisence": "MIT",
+  "license": "MIT",
   "authors": [
     {
       "name": "Jelle Sebreghts",
