@@ -1,0 +1,13 @@
+<VirtualHost *:80>
+  ServerAdmin admin@#DOMAIN#
+  DocumentRoot #DOCROOT#
+  ServerName #DOMAIN#
+  ErrorLog "/home/jelle/websites/logs/#DOMAIN#/error_log"
+  CustomLog "/home/jelle/websites/logs/#DOMAIN#/access_log" common
+  <Directory "#DOCROOT#">
+    Options All
+    AllowOverride All
+    Require all granted
+  </Directory>
+</VirtualHost>
+
