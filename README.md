@@ -13,15 +13,16 @@ composer require jelle-s/quickstart
 
 Following environment variables can/should be configured:
 
-- QUICKSTART_WEBSITES_DIR: The directory where your websites/projects live,
+- `QUICKSTART_WEBSITES_DIR`: The directory where your websites/projects live,
 defaults to `getenv('HOME') . '/websites'`
-- QUICKSTART_DATABASE_USER: The database user to use to create the other
+- `QUICKSTART_DATABASE_USER`: The database user to use to create the other
 databases and users, defaults to 'root'
-QUICKSTART_DATABASE_PASSWORD: The database password of the configured user
+- `QUICKSTART_DATABASE_PASSWORD`: The database password of the configured user
 above, defaults to ''
-QUICKSTART_DATABASE_HOST: The database host, defaults to 'localhost'
-QUICKSTART_DATABASE_DRIVER: The database driver to use, defaults to 'pdo_mysql',
-see https://www.doctrine-project.org/projects/doctrine-dbal/en/current/reference/configuration.html#driver
+- `QUICKSTART_DATABASE_HOST`: The database host, defaults to 'localhost'
+- `QUICKSTART_DATABASE_DRIVER`: The database driver to use, defaults to
+'pdo_mysql', see
+https://www.doctrine-project.org/projects/doctrine-dbal/en/current/reference/configuration.html#driver
 
 ## Commands
 
