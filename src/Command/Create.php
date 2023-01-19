@@ -33,7 +33,7 @@ class Create extends QuickStartCommand
               // Pad the domain name with spaces for searching, to prevent partial matches.
               $padded_domain_name = " {$domain_name} ";
 
-              if (strpos($hosts_file, $padded_domain_name)!== false) {
+              if (strpos($hosts_file, $padded_domain_name) !== false) {
                   $context->addViolation("DNS entry already exists for {$domain_name}.");
               }
           });
