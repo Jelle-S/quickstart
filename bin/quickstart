@@ -30,10 +30,10 @@ $envLocations = [
 ];
 
 foreach ($envLocations as $env) {
-    if (is_file($env . '/.env.dist')) {
+    if (is_file($env . '/.env')) {
         $dotenv = new \Symfony\Component\Dotenv\Dotenv();
         $dotenv->usePutenv(true);
-        $dotenv->loadEnv($env . '/.env');
+        $dotenv->load($env . '/.env');
         continue;
     }
 }
