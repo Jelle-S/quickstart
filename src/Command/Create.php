@@ -54,28 +54,30 @@ class Create extends QuickStartCommand
         $this->filesystem->appendToFile('/etc/hosts', $entry, true);
     }
 
-    protected function apache($domain, SymfonyStyle $io)
+    protected function apache($domain, $shortname, SymfonyStyle $io)
     {
         $io->writeln('<info>Creating Apache config...</info>');
         // Make sure the document root exists.
-        $document_root = $this->websitesDir . '/' . $domain;
+        $document_root = $this->websitesDir . '/' . $shortname;
         if (!$this->filesystem->exists($document_root)) {
             $this->filesystem->mkdir($document_root, 0777);
         }
-        if (!$this->filesystem->exists($this->websitesDir . '/logs/' . $domain)) {
-            $this->filesystem->mkdir($this->websitesDir . '/logs/' . $domain, 0777);
+        if (!$this->filesystem->exists($this->websitesDir . '/logs/' . $shortname)) {
+            $this->filesystem->mkdir($this->websitesDir . '/logs/' . $shortname, 0777);
         }
-        if (!$this->filesystem->exists($this->websitesDir . '/logs/' . $domain . '/error_log')) {
-            $this->filesystem->touch($this->websitesDir . '/logs/' . $domain . '/error_log');
+        if (!$this->filesystem->exists($this->websitesDir . '/logs/' . $shortname . '/error_log')) {
+            $this->filesystem->touch($this->websitesDir . '/logs/' . $shortname . '/error_log');
         }
-        if (!$this->filesystem->exists($this->websitesDir . '/logs/' . $domain . '/access_log')) {
-            $this->filesystem->touch($this->websitesDir . '/logs/' . $domain . '/access_log');
+        if (!$this->filesystem->exists($this->websitesDir . '/logs/' . $shortname . '/access_log')) {
+            $this->filesystem->touch($this->websitesDir . '/logs/' . $shortname . '/access_log');
         }
 
         // Create the vhost file.
         $vhost = file_get_contents(__DIR__ . '/../../Resources/templates/vhost.txt');
         $vhost = str_replace('#DOMAIN#', $domain, $vhost);
-        $vhost = str_replace('#DOCROOT#', $document_root, $vhost);
+        $vhost = str_replace('#SHORTNAME#', $shortname, $vhost);
+        $vhost = str_replace('#DOCROOT#', $document_root . '/web', $vhost);
+        $vhost = str_replace('#LOGDIR#', $this->websitesDir . '/logs', $vhost);
         $this->filesystem->dumpFile("/etc/apache2/sites-enabled/{$domain}.conf", $vhost);
 
         // Enable the vhost and restart Apache.
@@ -83,10 +85,10 @@ class Create extends QuickStartCommand
         $process->run();
     }
 
-    protected function database($domain, SymfonyStyle $io)
+    protected function database($shortname, SymfonyStyle $io)
     {
         $io->writeln('<info>Creating database config...</info>');
-        $database = str_replace('.', '_', $domain);
+        $database = str_replace('.', '_', $shortname);
         // We don't escape these queries. We assume the user that has permissions to
         // execute this command knows what they're doing _and_ could access the
         // database anyways (they can read env variables and whatnot), so have no

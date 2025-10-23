@@ -52,7 +52,8 @@ abstract class QuickStartCommand extends Command
         $this->addOption('dns', null, InputOption::VALUE_NONE, 'Add dns configuration to /etc/hosts')
             ->addOption('apache', null, InputOption::VALUE_NONE, 'Create an apache virtualhost')
             ->addOption('database', null, InputOption::VALUE_NONE, 'Create a database and database user')
-            ->addArgument('domain', InputArgument::REQUIRED);
+            ->addArgument('domain', InputArgument::REQUIRED, 'The domain name to use for this project')
+            ->addArgument('shortname', InputArgument::OPTIONAL, 'The short name to use for this project', '');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -75,6 +76,7 @@ abstract class QuickStartCommand extends Command
         $dns = $input->getOption('dns');
         $apache = $input->getOption('apache');
         $database = $input->getOption('database');
+        $shortname = $input->getArgument('shortname') ?: $domain;
 
         if ($dns === $apache && $apache === $database) {
             $dns = $apache = $database = true;
@@ -83,10 +85,10 @@ abstract class QuickStartCommand extends Command
             $this->dns($domain, $io);
         }
         if ($apache) {
-            $this->apache($domain, $io);
+            $this->apache($domain, $shortname, $io);
         }
         if ($database) {
-            $this->database($domain, $io);
+            $this->database($shortname, $io);
         }
 
         return Command::SUCCESS;
@@ -95,9 +97,9 @@ abstract class QuickStartCommand extends Command
 
     protected function validateInput(InputInterface $input)
     {
-        $domain = $input->getArgument('domain');
+        $shortname = $input->getArgument('shortname') ?: $input->getArgument('domain');
         $validator = Validation::createValidator();
-        $violations = $validator->validate($domain, $this->getInputValidationConstraints($input));
+        $violations = $validator->validate($shortname, $this->getInputValidationConstraints($input));
 
         return $violations;
     }
@@ -106,7 +108,6 @@ abstract class QuickStartCommand extends Command
     {
         $constraints = [
             new Length(min: 3, max: 16, maxMessage: 'Must be fewer than 16 characters long for mysql username to work.', minMessage: 'Must be at least 3 characters long'),
-            new Regex(pattern: '/\./', message: 'Must contain a dot.'),
         ];
 
         return $constraints;
@@ -114,6 +115,6 @@ abstract class QuickStartCommand extends Command
 
     abstract protected function confirmExecution(InputInterface $input, SymfonyStyle $io);
     abstract protected function dns($domain, SymfonyStyle $io);
-    abstract protected function apache($domain, SymfonyStyle $io);
-    abstract protected function database($domain, SymfonyStyle $io);
+    abstract protected function apache($domain, $shortname, SymfonyStyle $io);
+    abstract protected function database($shortname, SymfonyStyle $io);
 }

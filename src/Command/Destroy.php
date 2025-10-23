@@ -13,13 +13,10 @@ class Destroy extends QuickStartCommand
 
     protected function configure()
     {
+        parent::configure();
         $this
             ->setName('destroy')
-            ->setDescription('Destroy a database and dns and apache configuration for a domain.')
-            ->addOption('dns', null, InputOption::VALUE_NONE, 'Remove dns configuration from /etc/hosts')
-            ->addOption('apache', null, InputOption::VALUE_NONE, 'Remove the apache virtualhost')
-            ->addOption('database', null, InputOption::VALUE_NONE, 'Remove the database and database user')
-            ->addArgument('domain', InputArgument::REQUIRED);
+            ->setDescription('Destroy a database and dns and apache configuration for a domain.');
     }
 
     protected function confirmExecution(InputInterface $input, SymfonyStyle $io)
@@ -42,7 +39,7 @@ class Destroy extends QuickStartCommand
         $process->run();
     }
 
-    protected function apache($domain, SymfonyStyle $io)
+    protected function apache($domain, $shortname, SymfonyStyle $io)
     {
         $io->writeln('<info>Destroying Apache config...</info>');
         $filename = "/etc/apache2/sites-enabled/{$domain}.conf";
@@ -55,10 +52,10 @@ class Destroy extends QuickStartCommand
         $process->run();
     }
 
-    protected function database($domain, SymfonyStyle $io)
+    protected function database($shortname, SymfonyStyle $io)
     {
         $io->writeln('<info>Destroying database config...</info>');
-        $database = str_replace('.', '_', $domain);
+        $database = str_replace('.', '_', $shortname);
         // We don't escape these queries. We assume the user that has permissions to
         // execute this command knows what they're doing _and_ could access the
         // database anyways (they can read env variables and whatnot), so have no
