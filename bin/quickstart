@@ -24,6 +24,19 @@ if (!$loaded) {
     exit(1);
 }
 
+$envLocations = [
+    __DIR__ . '/..',
+    __DIR__ . '/../../../..',
+];
+
+foreach ($envLocations as $env) {
+    if (is_file($env . '/.env.dist')) {
+        $dotenv = new \Symfony\Component\Dotenv\Dotenv();
+        $dotenv->usePutenv(true);
+        $dotenv->loadEnv($env . '/.env');
+        continue;
+    }
+}
 use Jelle_S\QuickStart\Command\Create;
 use Jelle_S\QuickStart\Command\Destroy;
 use Symfony\Component\Console\Application;
