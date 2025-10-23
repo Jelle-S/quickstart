@@ -50,7 +50,7 @@ class Create extends QuickStartCommand
     protected function dns($domain, SymfonyStyle $io)
     {
         $io->writeln('<info>Creating DNS config...</info>');
-        $entry = "127.0.0.1 {$domain} #quickstart";
+        $entry = "127.0.0.1 {$domain} #quickstart" . PHP_EOL;
         $this->filesystem->appendToFile('/etc/hosts', $entry, true);
     }
 
