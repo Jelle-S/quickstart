@@ -91,9 +91,9 @@ class Create extends QuickStartCommand
         // execute this command knows what they're doing _and_ could access the
         // database anyways (they can read env variables and whatnot), so have no
         // reason to try sql injection with this command anyway.
-        $this->database->executeQuery("GRANT USAGE ON {$database}.* TO {$database}@localhost IDENTIFIED BY '{$database}' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0");
+        $this->database->executeQuery("CREATE USER IF NOT EXISTS '{$database}'@'localhost' IDENTIFIED BY '{$database}' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0");
         $this->database->executeQuery("CREATE DATABASE IF NOT EXISTS {$database}");
-        $this->database->executeQuery("GRANT ALL PRIVILEGES ON {$database}.* TO {$database}@localhost");
+        $this->database->executeQuery("GRANT ALL PRIVILEGES ON {$database}.* TO '{$database}'@'localhost'");
         $this->database->executeQuery("FLUSH PRIVILEGES");
     }
 }
