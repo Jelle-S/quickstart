@@ -24,6 +24,12 @@ if (!$loaded) {
     exit(1);
 }
 
+use Jelle_S\QuickStart\Command\Create;
+use Jelle_S\QuickStart\Command\Destroy;
+use Jelle_S\QuickStart\Command\DrupalSettings;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Dotenv\Dotenv;
+
 $envLocations = [
     __DIR__ . '/..',
     __DIR__ . '/../../../..',
@@ -31,19 +37,16 @@ $envLocations = [
 
 foreach ($envLocations as $env) {
     if (is_file($env . '/.env')) {
-        $dotenv = new \Symfony\Component\Dotenv\Dotenv();
+        $dotenv = new Dotenv();
         $dotenv->usePutenv(true);
         $dotenv->load($env . '/.env');
         continue;
     }
 }
-use Jelle_S\QuickStart\Command\Create;
-use Jelle_S\QuickStart\Command\Destroy;
-use Symfony\Component\Console\Application;
 
 $application = new Application();
-
 $application->add(new Create());
 $application->add(new Destroy());
+$application->add(new DrupalSettings());
 
 $application->run();

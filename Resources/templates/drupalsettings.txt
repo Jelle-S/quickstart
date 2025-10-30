@@ -1,0 +1,14 @@
+$databases['default']['default'] = [
+  'database' => '#SHORTNAME#',
+  'username' => '#SHORTNAME#',
+  'password' => '#SHORTNAME#',
+  'host' => '#DATABASEHOST#',
+  'port' => '3306',
+  'driver' => '#DATABASEDRIVER#',
+  'prefix' => '',
+  'collation' => 'utf8mb4_general_ci',
+];
+
+$settings['config_sync_directory'] = '../config/sync';
+
+$settings['hash_salt'] = '#HASHSALT#';
